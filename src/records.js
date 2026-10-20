@@ -28,7 +28,7 @@ function renderList() {
   $("recordTitle").textContent = t.ja;
   const convs = state.conversations.filter((c) => c.themeId === selectedTheme);
   $("convs").innerHTML = convs.length
-    ? convs.map((c) => `<li><button data-id="${c.id}"><span>${esc(c.title || "（無題）")}</span><span class="meta">${fmtDateTime(c.updatedAt)} · ${esc(convLabel(c))} · 発言${userTurns(c)}回</span></button></li>`).join("")
+    ? convs.map((c) => `<li><button data-id="${esc(c.id)}"><span>${esc(c.title || "（無題）")}</span><span class="meta">${fmtDateTime(c.updatedAt)} · ${esc(convLabel(c))} · 発言${userTurns(c)}回</span></button></li>`).join("")
     : '<li class="empty">まだ会話がありません。「このテーマで話す」から始めましょう。</li>';
 }
 
@@ -52,7 +52,7 @@ function renderNotes() {
   f.value = used.some((t) => t.id === cur) ? cur : "";
   const list = state.notes.filter((n) => !f.value || n.themeId === f.value);
   $("noteList").innerHTML = list.length
-    ? list.map((n) => `<li><div>${esc(n.text)}<br><small>${esc(n.date)}${n.themeId ? " · " + esc(themeById(n.themeId).ja) : ""}</small></div><button class="linkbtn" data-id="${n.id}">覚えた</button></li>`).join("")
+    ? list.map((n) => `<li><div>${esc(n.text)}<br><small>${esc(n.date)}${n.themeId ? " · " + esc(themeById(n.themeId).ja) : ""}</small></div><button class="linkbtn" data-id="${esc(n.id)}">覚えた</button></li>`).join("")
     : '<li class="empty">AI会話で直された表現がここにたまります。</li>';
 }
 

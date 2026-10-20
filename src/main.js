@@ -3,7 +3,7 @@ import { listModels, chat as geminiChat, model, DEFAULT_MODEL, apiKey } from "./
 import { initPlan, renderPlanTab } from "./plan.js";
 import { initChat, refreshChat } from "./chat.js";
 import { initRecords, renderRecords, renderNotes } from "./records.js";
-import { $, onTab, showTab } from "./util.js";
+import { $, esc, onTab, showTab } from "./util.js";
 
 // ---- タブ ----
 document.querySelectorAll(".tabs button").forEach((b) => (b.onclick = () => showTab(b.dataset.tab)));
@@ -17,7 +17,7 @@ onTab("settings", renderSettings);
 function renderModelOptions(models) {
   const list = models || [{ id: DEFAULT_MODEL, label: `${DEFAULT_MODEL}（既定・常に最新のFlash）` }];
   if (!list.some((m) => m.id === model())) list.unshift({ id: model(), label: model() });
-  $("model").innerHTML = list.map((m) => `<option value="${m.id}">${m.label}${m.label.includes(m.id) ? "" : `（${m.id}）`}</option>`).join("");
+  $("model").innerHTML = list.map((m) => `<option value="${esc(m.id)}">${esc(m.label)}${m.label.includes(m.id) ? "" : `（${esc(m.id)}）`}</option>`).join("");
   $("model").value = model();
 }
 function renderSettings() {
