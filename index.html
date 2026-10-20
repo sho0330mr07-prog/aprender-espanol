@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Aprender Español</title>
+  <meta name="theme-color" content="#1f4fbf">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Español">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <h1>Aprender <span>Español</span></h1>
+      <p id="heroSub">DELE B2 合格プラン</p>
+    </div>
+    <div class="count"><b id="days">—</b><small>試験まであと（日）</small></div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="plan" aria-selected="true">計画</button>
+    <button role="tab" data-tab="chat" aria-selected="false">会話</button>
+    <button role="tab" data-tab="records" aria-selected="false">記録</button>
+    <button role="tab" data-tab="notes" aria-selected="false">ノート</button>
+    <button role="tab" data-tab="settings" aria-selected="false" aria-label="設定">設定</button>
+  </nav>
+
+  <main>
+    <!-- 学習計画 -->
+    <section id="plan">
+      <div class="panel">
+        <div class="label">受験する試験</div>
+        <div class="row">
+          <div><select id="exam" aria-label="試験">
+            <option value="DELE">DELE</option>
+            <option value="SIELE">SIELE</option>
+            <option value="NISEN">西検（スペイン語技能検定）</option>
+          </select></div>
+          <div><select id="level" aria-label="レベル"></select></div>
+          <div id="sessWrap"><select id="session" aria-label="試験日"></select></div>
+          <div id="customWrap" hidden><input type="date" id="customDate" aria-label="試験日"></div>
+        </div>
+        <div class="miles" id="miles"></div>
+        <p class="note" id="srcNote"></p>
+      </div>
+      <div class="panel">
+        <div class="label">全体の流れ</div>
+        <div class="phases" id="phases"></div>
+        <p class="note" id="phaseDesc"></p>
+      </div>
+      <div class="panel">
+        <div class="weeknav">
+          <button class="btn ghost" id="prevW" aria-label="前の週">←</button>
+          <div class="center"><h3 id="weekTitle">今週</h3><div class="note" id="weekRange"></div></div>
+          <button class="btn ghost" id="nextW" aria-label="次の週">→</button>
+        </div>
+        <div class="bar"><i id="weekBar"></i></div>
+        <ul class="tasks" id="tasks"></ul>
+      </div>
+    </section>
+
+    <!-- AI会話 -->
+    <section id="chat" hidden>
+      <div class="panel" id="chatSetup">
+        <div class="row">
+          <div><div class="label">モード</div><select id="mode"></select></div>
+          <div><div class="label">レベル</div><select id="clevel"></select></div>
+        </div>
+        <div id="themeWrap" hidden><div class="label">テーマ</div><div class="chips" id="themes"></div></div>
+        <div id="oralWrap" hidden><div class="label">課題（B2 口頭試験）</div><div class="chips" id="tareas"></div></div>
+        <div class="row">
+          <button class="btn" id="startChat">AIから話題を出してもらう</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="convhead">
+          <div class="min0"><div class="label" id="convLabel">新しい会話</div><div class="note" id="convMeta"></div></div>
+          <button class="btn ghost small" id="newChat">新しい会話</button>
+        </div>
+        <div class="log" id="log" aria-live="polite"></div>
+        <form class="compose" id="form">
+          <textarea id="input" rows="2" placeholder="スペイン語で話しかけてみよう（⌘+Enterで送信）"></textarea>
+          <button class="btn" id="send" type="submit">送信</button>
+        </form>
+        <p class="note warn" id="chatStatus"></p>
+      </div>
+    </section>
+
+    <!-- テーマ別の会話記録 -->
+    <section id="records" hidden>
+      <div class="panel">
+        <div class="label">テーマ別の会話記録</div>
+        <p class="note">DELEでよく出るテーマごとに、話した回数と最後に話した日を表示します。回数の少ないテーマから練習すると偏りが減ります。</p>
+        <div class="themegrid" id="themeGrid"></div>
+      </div>
+      <div class="panel" id="recordList" hidden>
+        <div class="convhead">
+          <h3 id="recordTitle"></h3>
+          <button class="btn ghost small" id="recordNew">このテーマで話す</button>
+        </div>
+        <ul class="convs" id="convs"></ul>
+      </div>
+      <div class="panel" id="recordView" hidden>
+        <div class="convhead">
+          <div class="min0"><h3 id="viewTitle"></h3><div class="note" id="viewMeta"></div></div>
+          <div class="row tight">
+            <button class="btn small" id="viewContinue">続きから話す</button>
+            <button class="btn ghost small" id="viewDelete">削除</button>
+          </div>
+        </div>
+        <div class="log static" id="viewLog"></div>
+      </div>
+    </section>
+
+    <!-- 間違いノート -->
+    <section id="notes" hidden>
+      <div class="panel">
+        <div class="convhead">
+          <div class="label">会話で直された表現</div>
+          <select id="noteFilter" aria-label="テーマで絞り込み" class="auto"></select>
+        </div>
+        <ul class="notes" id="noteList"></ul>
+      </div>
+    </section>
+
+    <!-- 設定 -->
+    <section id="settings" hidden>
+      <div class="panel">
+        <div class="label">Gemini API</div>
+        <p class="note">Google AI Studio で発行したAPIキーを入力します。キーはこのブラウザにだけ保存されます。</p>
+        <input type="password" id="apiKey" placeholder="AIza..." autocomplete="off">
+        <div class="row">
+          <div><select id="model" aria-label="モデル"></select></div>
+          <button class="btn ghost" id="loadModels">使えるモデルを読み込む</button>
+        </div>
+        <div class="row">
+          <button class="btn" id="saveKey">保存</button>
+          <button class="btn ghost" id="testKey">接続テスト</button>
+        </div>
+        <p class="note" id="keyStatus"></p>
+      </div>
+      <div class="panel">
+        <div class="label">バックアップ</div>
+        <p class="note">計画の進み具合・会話記録・ノートをJSONファイルで書き出し、別のブラウザやパソコンに読み込めます（APIキーは含みません）。</p>
+        <div class="row">
+          <button class="btn ghost" id="exportBtn">書き出す</button>
+          <label class="btn ghost filebtn">読み込む<input type="file" id="importFile" accept="application/json"></label>
+        </div>
+        <p class="note" id="backupStatus"></p>
+      </div>
+    </section>
+  </main>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

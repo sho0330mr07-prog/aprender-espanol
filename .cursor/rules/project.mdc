@@ -1,0 +1,19 @@
+---
+description: Aprender Español（DELE B2 向けスペイン語学習アプリ）の開発ルール
+alwaysApply: true
+---
+
+# プロジェクト概要
+- 利用者は日本語話者のスペイン語学習者。目標は DELE B2（2027年秋）。
+- 自分専用のローカルWebアプリ。Vite + 素の JavaScript（ES Modules）。フレームワークは使っていない。
+- AI会話は Gemini API（Google AI Studio のAPIキー）をブラウザから直接呼ぶ（src/gemini.js）。
+- データは localStorage（キー `aprender-espanol:v2`）。形は src/store.js を参照。会話は `conversations[]`、各会話は `themeId` を持ち、記録タブでテーマ別に集計する。
+
+# 方針
+- UIの文言は日本語。AIの会話はスペイン語、訳・添削は日本語。
+- 色・フォントは src/style.css の `:root` 変数を使う。ライト/ダーク両対応を崩さない。
+- スマホ幅（約400px）でも横スクロールしないこと。
+- 依存パッケージは必要なときだけ追加する。
+- localStorage のデータ形を変えるときは、既存データを読めるように store.js の load() で移行処理を書く。
+- DELE の日程やテーマは src/data.js に集約する。日程を更新するときは Instituto Cervantes の公式発表を確認する。
+- AI への指示文（systemPrompt）の出力形式「本文 / ###JA### / ###CORR###」は splitReply() と間違いノートの自動収集が依存しているので、変えるときは両方直す。
