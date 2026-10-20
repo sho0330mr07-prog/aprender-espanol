@@ -5,7 +5,8 @@ alwaysApply: true
 
 # プロジェクト概要
 - 利用者は日本語話者のスペイン語学習者。目標は DELE B2（2027年秋）。
-- 自分専用のローカルWebアプリ。Vite + 素の JavaScript（ES Modules）。フレームワークは使っていない。
+- 自分と友人用のWebアプリ（PWA）。Vite + 素の JavaScript（ES Modules）。フレームワークは使っていない。
+- GitHub Pages（/aprender-espanol/ 配下）で公開。パスは絶対パス `/` を直書きせず import.meta.env.BASE_URL や相対パスを使う。公開は `npm run deploy`。
 - AI会話は Gemini API（Google AI Studio のAPIキー）をブラウザから直接呼ぶ（src/gemini.js）。
 - データは localStorage（キー `aprender-espanol:v2`）。形は src/store.js を参照。会話は `conversations[]`、各会話は `themeId` を持ち、記録タブでテーマ別に集計する。
 
